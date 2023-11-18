@@ -1,0 +1,52 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.9.0"
+    id "application"
+    id "org.jetbrains.kotlin.plugin.serialization" version "1.9.0"
+}
+
+group = "ru.stersh"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes "Main-Class": "ru.stersh.bookcrawler.MainKt"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.1.0")
+    def ktor_version = "2.3.5"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-client-auth:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:1.2.9")
+    implementation("com.h2database:h2:2.2.224")
+    def exposed_version = "0.39.2"
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.redundent:kotlin-xml-builder:1.9.1")
+    implementation("com.dropbox.core:dropbox-core-sdk:5.4.5")
+}
+
+kotlin {
+    jvmToolchain(8)
+}
+
+application {
+    mainClassName = "ru.stersh.bookcrawler.MainKt"
+}

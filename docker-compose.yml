@@ -1,0 +1,7 @@
+version: '3'
+services:
+  bookcrawler:
+    restart: always
+    build: .
+    volumes:
+      - d://config:/config

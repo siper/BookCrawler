@@ -1,0 +1,67 @@
+package ru.stersh.bookcrawler.module.telegram
+
+import com.github.kotlintelegrambot.Bot
+import com.github.kotlintelegrambot.entities.*
+import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
+import ru.stersh.bookcrawler.core.*
+import ru.stersh.bookcrawler.core.Notification
+
+class TelegramNotificationHandler(
+    private val bot: Bot,
+    private val chatId: Long
+) : NotificationManager.NotificationHandler {
+
+    override val name: String = "telegram"
+
+    override suspend fun onNewNotification(notification: Notification) {
+        val title = when (notification.type) {
+            MessageType.NEW_BOOK_IN_LIBRARY -> "Новая книга в библиотеке"
+            MessageType.UPDATES_IN_READING_BOOK -> "Обновление книги"
+            MessageType.NEW_BOOK_IN_SERIES -> "Новая книга в серии"
+        }
+        sendUpdates(title, notification)
+    }
+
+    private fun sendUpdates(title: String, notification: Notification) {
+        bot.sendPhoto(
+            chatId = ChatId.fromId(chatId),
+            photo = TelegramFile.ByUrl(notification.coverUrl),
+            caption = """
+                $title
+                
+                *${notification.title}*
+                _${notification.author}_
+                __${notification.series}__
+            """.trimIndent(),
+            parseMode = ParseMode.MARKDOWN,
+            replyMarkup = createReplyMarkup(notification.id, notification.availableActions)
+        )
+    }
+
+    private fun createReplyMarkup(bookId: BookId, actions: List<Action>): ReplyMarkup? {
+        if (actions.isEmpty()) {
+            return null
+        }
+        return actions
+            .map {
+                when (it) {
+                    Action.ADD_TO_LIBRARY -> {
+                        InlineKeyboardButton.CallbackData(
+                            text = "Добавить в библиотеку",
+                            callbackData = "library_add_${bookId.provider}_${bookId.id}"
+                        )
+                    }
+
+                    Action.MARK_READ -> {
+                        InlineKeyboardButton.CallbackData(
+                            text = "Отметить прочитанным",
+                            callbackData = "mark_read_${bookId.provider}_${bookId.id}"
+                        )
+                    }
+                }
+            }
+            .let {
+                InlineKeyboardMarkup.create(it)
+            }
+    }
+}

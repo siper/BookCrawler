@@ -5,10 +5,11 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import ru.stersh.bookcrawler.core.*
+import ru.stersh.bookcrawler.logger
 import ru.stersh.bookcrawler.module.at.api.At
 import ru.stersh.bookcrawler.module.at.api.LibraryState
 import ru.stersh.bookcrawler.module.at.api.Work
-import ru.stersh.bookcrawler.core.*
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -17,12 +18,18 @@ class AtLibraryCheckTask : TaskManager.Task {
 
     override suspend fun onInvokeJob() {
         while (true) {
+            val remoteLibrary = runCatching { At.library() }
+                .onFailure { logger.warn("[AT] Filed to fetch library", it) }
+                .getOrNull()
+            if (remoteLibrary == null) {
+                delay(DELAY)
+                return
+            }
             val localLibrary = transaction {
                 AtBookDb
                     .selectAll()
                     .map { AtBook.fromRow(it) }
             }
-            val remoteLibrary = At.library()
             val newWorkInSeriesIds = remoteLibrary.mapNotNull { it.seriesNextWorkId }
 
             for (work in remoteLibrary) {
@@ -46,8 +53,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             }
                         )
                     )
-                    val book = At.getBook(work.id)
-                    BookHandlerManager.onBookCreated(book)
+                    handleBook(work.id)
                     continue
                 }
                 if (localBook.lastModificationTime != work.lastModificationTime) {
@@ -76,8 +82,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             }
                         )
                     )
-                    val book = At.getBook(work.id)
-                    BookHandlerManager.onBookCreated(book)
+                    handleBook(work.id)
                     continue
                 }
             }
@@ -99,6 +104,15 @@ class AtLibraryCheckTask : TaskManager.Task {
                 }
             }
             delay(DELAY)
+        }
+    }
+
+    private suspend fun handleBook(workId: Long) {
+        runCatching {
+            val book = At.getBook(workId)
+            BookHandlerManager.onBookCreated(book)
+        }.onFailure {
+            logger.warn("Filed to download work $workId")
         }
     }
 

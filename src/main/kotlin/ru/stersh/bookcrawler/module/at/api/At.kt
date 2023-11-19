@@ -164,7 +164,7 @@ object At {
         val series = if (workDetails.seriesOrder != null && workDetails.seriesTitle != null) {
             Book.Series(
                 title = workDetails.seriesTitle,
-                order = workDetails.seriesOrder
+                order = workDetails.seriesOrder.inc()
             )
         } else {
             null

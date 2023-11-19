@@ -6,6 +6,8 @@ data class Notification(
     val title: String,
     val coverUrl: String,
     val author: String,
-    val series: String?,
+    val series: Series?,
     val availableActions: List<Action>
-)
+) {
+    data class Series(val title: String, val order: Int)
+}

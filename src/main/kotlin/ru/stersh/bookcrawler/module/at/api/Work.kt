@@ -85,9 +85,9 @@ data class Work(
     @SerialName("seriesNextWorkId")
     val seriesNextWorkId: Long?,
     @SerialName("seriesOrder")
-    val seriesOrder: Long,
+    val seriesOrder: Int?,
     @SerialName("seriesTitle")
-    val seriesTitle: String,
+    val seriesTitle: String?,
     @SerialName("state")
     val state: String,
     @SerialName("status")

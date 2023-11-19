@@ -9,7 +9,7 @@ import ru.stersh.bookcrawler.core.TaskManager
 import ru.stersh.bookcrawler.logger
 
 class AtModule : Module() {
-    private val hasAccessToken = Properties.get("at.accessToken") != null
+    private val hasAccessToken = Properties.get(ACCESS_TOKEN) != null
 
     override val name: String = "at"
     override val actionHandlers: List<ActionsManager.ActionHandler> = if (hasAccessToken) {
@@ -30,5 +30,9 @@ class AtModule : Module() {
         if (!hasAccessToken) {
             logger.info("At module not initialized access token not set")
         }
+    }
+
+    companion object {
+        private const val ACCESS_TOKEN = "at.accessToken"
     }
 }

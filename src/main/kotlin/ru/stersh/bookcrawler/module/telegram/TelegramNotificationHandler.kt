@@ -4,7 +4,6 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.*
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import ru.stersh.bookcrawler.core.*
-import ru.stersh.bookcrawler.core.Notification
 
 class TelegramNotificationHandler(
     private val bot: Bot,
@@ -23,16 +22,23 @@ class TelegramNotificationHandler(
     }
 
     private fun sendUpdates(title: String, notification: Notification) {
+        val message = StringBuilder().apply {
+            append(title)
+            append("\n")
+            append("\n")
+            append("*${notification.title}*")
+            append("\n")
+            append("_${notification.author}_")
+        }
+        if (notification.series != null) {
+            message.append("\n")
+            message.append("__${notification.series.title} (${notification.series.order})__")
+        }
+
         bot.sendPhoto(
             chatId = ChatId.fromId(chatId),
             photo = TelegramFile.ByUrl(notification.coverUrl),
-            caption = """
-                $title
-                
-                *${notification.title}*
-                _${notification.author}_
-                __${notification.series}__
-            """.trimIndent(),
+            caption = message.toString(),
             parseMode = ParseMode.MARKDOWN,
             replyMarkup = createReplyMarkup(notification.id, notification.availableActions)
         )

@@ -49,7 +49,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             title = work.title,
                             coverUrl = work.coverUrl,
                             author = work.authorFIO,
-                            series = work.seriesTitle,
+                            series = getSeriesFromWork(work),
                             type = MessageType.NEW_BOOK_IN_LIBRARY,
                             availableActions = if (work.inLibraryState == LibraryState.Finished) {
                                 emptyList()
@@ -72,13 +72,14 @@ class AtLibraryCheckTask : TaskManager.Task {
                             it[lastModificationTime] = work.lastModificationTime
                         }
                     }
+
                     NotificationManager.onNewNotification(
                         Notification(
                             id = BookId(work.id, At.PROVIDER_NAME),
                             title = work.title,
                             coverUrl = work.coverUrl,
                             author = work.authorFIO,
-                            series = work.seriesTitle,
+                            series = getSeriesFromWork(work),
                             type = MessageType.UPDATES_IN_READING_BOOK,
                             availableActions = if (work.inLibraryState == LibraryState.Finished) {
                                 emptyList()
@@ -101,7 +102,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             title = nextWork.title,
                             coverUrl = nextWork.coverUrl,
                             author = nextWork.authorFIO,
-                            series = nextWork.seriesTitle,
+                            series = getSeriesFromWork(nextWork),
                             type = MessageType.NEW_BOOK_IN_SERIES,
                             availableActions = listOf(Action.ADD_TO_LIBRARY)
                         )
@@ -109,6 +110,17 @@ class AtLibraryCheckTask : TaskManager.Task {
                 }
             }
             delay(libraryCheckDelay.minutes)
+        }
+    }
+
+    private fun getSeriesFromWork(work: Work): Notification.Series? {
+        return if (work.seriesTitle != null && work.seriesOrder != null) {
+            Notification.Series(
+                title = work.seriesTitle,
+                order = work.seriesOrder.inc()
+            )
+        } else {
+            null
         }
     }
 

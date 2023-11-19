@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import ru.stersh.bookcrawler.Properties
 import ru.stersh.bookcrawler.core.*
 import ru.stersh.bookcrawler.logger
 import ru.stersh.bookcrawler.module.at.api.At
@@ -12,9 +13,12 @@ import ru.stersh.bookcrawler.module.at.api.LibraryState
 import ru.stersh.bookcrawler.module.at.api.Work
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration.Companion.minutes
 
 class AtLibraryCheckTask : TaskManager.Task {
     override val name: String = "at"
+
+    private val libraryCheckDelay = Properties.get(LIBRARY_CHECK_PERIOD)?.toLongOrNull() ?: DELAY
 
     override suspend fun onInvokeJob() {
         while (true) {
@@ -22,7 +26,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                 .onFailure { logger.warn("[AT] Filed to fetch library", it) }
                 .getOrNull()
             if (remoteLibrary == null) {
-                delay(DELAY)
+                delay(libraryCheckDelay.minutes)
                 return
             }
             val localLibrary = transaction {
@@ -35,7 +39,8 @@ class AtLibraryCheckTask : TaskManager.Task {
             for (work in remoteLibrary) {
                 val localBook = localLibrary.firstOrNull { it.id == work.id }
                 if (localBook == null) {
-                    val inLibrary = work.inLibraryState != LibraryState.None && work.inLibraryState != LibraryState.Disliked
+                    val inLibrary =
+                        work.inLibraryState != LibraryState.None && work.inLibraryState != LibraryState.Disliked
                     insertWorkIntoLibrary(work, inLibrary)
 
                     NotificationManager.onNewNotification(
@@ -103,7 +108,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                     )
                 }
             }
-            delay(DELAY)
+            delay(libraryCheckDelay.minutes)
         }
     }
 
@@ -134,6 +139,7 @@ class AtLibraryCheckTask : TaskManager.Task {
     }
 
     companion object {
-        private const val DELAY = 10 * 60 * 1000L
+        private const val DELAY = 10L
+        private const val LIBRARY_CHECK_PERIOD = "at.libraryCheckPeriod"
     }
 }

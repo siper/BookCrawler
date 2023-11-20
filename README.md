@@ -48,6 +48,7 @@ telegram.chatId=<telegram chatId>                      # telegram chat id (use c
 telegram.uploadBookUpdates=true                        # send book updates to telegram bot (default: false)
 dropbox.storeFolder=/Applications/Dropbox PocketBook   # Dropbox book store folder (for pocket book for example)
 dropbox.token=<dropbox app access token>               # Dropbox app access token, should have write metadata and write files scopes
+local.storeFolder=/path/to/library                     # Local book storage path, if not set, books not been stored locally
 ```
 
 ## License

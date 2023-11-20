@@ -6,6 +6,7 @@ import com.dropbox.core.v2.files.WriteMode
 import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookHandlerManager
 import ru.stersh.bookcrawler.core.toFb2
+import ru.stersh.bookcrawler.logger
 
 class DropboxBookHandler(
     private val token: String,
@@ -30,10 +31,14 @@ class DropboxBookHandler(
             "${folder}/${bookFilename}"
         }
 
-        client
-            .files()
-            .uploadBuilder(targetPath)
-            .withMode(WriteMode.OVERWRITE)
-            .uploadAndFinish(ins)
+        try {
+            client
+                .files()
+                .uploadBuilder(targetPath)
+                .withMode(WriteMode.OVERWRITE)
+                .uploadAndFinish(ins)
+        } catch (e: Exception) {
+            logger.warn("Filed upload book on dropbox", e)
+        }
     }
 }

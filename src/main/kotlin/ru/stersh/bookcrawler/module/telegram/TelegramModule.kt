@@ -16,6 +16,7 @@ class TelegramModule : Module() {
 
     private val chatId = Properties.get("notification.telegram.chatId")?.toLongOrNull()
     private val botToken = Properties.get("notification.telegram.botToken")
+    private val uploadBookUpdates = Properties.get("notification.telegram.uploadBookUpdates")?.toBoolean() ?: false
 
     private val bot = createBot()
     private val notificationHandler = if (bot != null && chatId != null) {
@@ -24,9 +25,15 @@ class TelegramModule : Module() {
         logger.info("Telegram module not initialized bot token or chatId not set")
         null
     }
+    private val bookHandler = if (bot != null && chatId != null && uploadBookUpdates) {
+        TelegramBookHandler(bot, chatId)
+    } else {
+        null
+    }
 
     override val name: String = "telegram"
     override val notificationHandlers: List<NotificationManager.NotificationHandler> = listOfNotNull(notificationHandler)
+    override val bookHandlers: List<BookHandlerManager.BookHandler> = listOfNotNull(bookHandler)
 
     init {
         if (bot != null) {

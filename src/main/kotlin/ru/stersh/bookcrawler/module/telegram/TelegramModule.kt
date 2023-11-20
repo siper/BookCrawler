@@ -14,9 +14,9 @@ class TelegramModule : Module() {
     private val telegramScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var botRunJob: Job? = null
 
-    private val chatId = Properties.get("notification.telegram.chatId")?.toLongOrNull()
-    private val botToken = Properties.get("notification.telegram.botToken")
-    private val uploadBookUpdates = Properties.get("notification.telegram.uploadBookUpdates")?.toBoolean() ?: false
+    private val chatId = Properties.get("telegram.chatId")?.toLongOrNull()
+    private val botToken = Properties.get("telegram.botToken")
+    private val uploadBookUpdates = Properties.get("telegram.uploadBookUpdates")?.toBoolean() ?: false
 
     private val bot = createBot()
     private val notificationHandler = if (bot != null && chatId != null) {

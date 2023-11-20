@@ -41,13 +41,13 @@ After that, you should create `config.properties` file in `/path/to/data` folder
 Example configuration file:
 
 ```properties
-at.accessToken=<author.today token here>                       # author.today access token
-at.libraryCheckPeriod=10                                       # library check interval in minutes (default: 10)
-notification.telegram.botToken=<your telegram token here>      # telegram bot token (use Bot Father to receive it)
-notification.telegram.chatId=<telegram chatId>                 # telegram chat id (use chat id bot to receive it)
-notification.telegram.uploadBookUpdates=true                   # send book updates to telegram bot (default: false)
-storage.dropbox.storeFolder=/Applications/Dropbox PocketBook   # Dropbox book store folder (for pocket book for example)
-storage.dropbox.token=<dropbox app access token>               # Dropbox app access token, should have write metadata and write files scopes
+at.accessToken=<author.today token here>               # author.today access token
+at.libraryCheckPeriod=10                               # library check interval in minutes (default: 10)
+telegram.botToken=<your telegram token here>           # telegram bot token (use Bot Father to receive it)
+telegram.chatId=<telegram chatId>                      # telegram chat id (use chat id bot to receive it)
+telegram.uploadBookUpdates=true                        # send book updates to telegram bot (default: false)
+dropbox.storeFolder=/Applications/Dropbox PocketBook   # Dropbox book store folder (for pocket book for example)
+dropbox.token=<dropbox app access token>               # Dropbox app access token, should have write metadata and write files scopes
 ```
 
 ## License

@@ -27,7 +27,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                 .getOrNull()
             if (remoteLibrary == null) {
                 delay(libraryCheckDelay.minutes)
-                return
+                continue
             }
             val localLibrary = transaction {
                 AtBookDb

@@ -13,6 +13,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
+import ru.stersh.bookcrawler.NETWORK_LOG_LEVEL
 import ru.stersh.bookcrawler.Properties
 import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookId
@@ -35,7 +36,7 @@ object At {
         }
         install(HttpSend)
         install(Logging) {
-            level = LogLevel.ALL
+            level = NETWORK_LOG_LEVEL
         }
         install(Auth) {
             bearer {

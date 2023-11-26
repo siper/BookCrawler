@@ -41,6 +41,9 @@ After that, you should create `config.properties` file in `/path/to/data` folder
 Example configuration file:
 
 ```properties
+logging.network=NONE                                   # network layer log level, may be: ALL, HEADERS, BODY, INFO, NONE (default: NONE)
+logging.app=INFO                                       # app log level, may be: OFF, ERROR, WARN, INFO, DEBUG, TRACE, ALL (default: INFO)
+logging.db=true                                        # log database transactions (default: false)
 at.accessToken=<author.today token here>               # author.today access token
 at.libraryCheckPeriod=10                               # library check interval in minutes (default: 10)
 telegram.botToken=<your telegram token here>           # telegram bot token (use Bot Father to receive it)

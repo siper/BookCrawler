@@ -1,6 +1,6 @@
 
 [![Badge License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://github.com/siper/BookCrawler/blob/dev/LICENSE)
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/repository/docker/stersh/bookmoon-dev/general "Docker hub")
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/repository/docker/stersh/bookcrawler-dev/general "Docker hub")
 
 ## Overview
 

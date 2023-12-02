@@ -37,7 +37,7 @@ data class Work(
     @SerialName("finishTime")
     val finishTime: String?,
     @SerialName("firstSubGenreId")
-    val firstSubGenreId: Long,
+    val firstSubGenreId: Long?,
     @SerialName("format")
     val format: String,
     @SerialName("genreId")

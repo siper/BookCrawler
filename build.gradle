@@ -41,6 +41,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.redundent:kotlin-xml-builder:1.9.1")
     implementation("com.dropbox.core:dropbox-core-sdk:5.4.5")
+    implementation("javax.mail:mail:1.4.7")
 }
 
 kotlin {

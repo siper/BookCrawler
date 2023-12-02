@@ -52,6 +52,12 @@ telegram.uploadBookUpdates=true                        # send book updates to te
 dropbox.storeFolder=/Applications/Dropbox PocketBook   # Dropbox book store folder (for pocket book for example)
 dropbox.token=<dropbox app access token>               # Dropbox app access token, should have write metadata and write files scopes
 local.storeFolder=/path/to/library                     # Local book storage path, if not set, books not been stored locally
+mail.from=<from email address>                         # Address from books sent
+mail.to=<to email address>                             # Address to books sent
+mail.smtpUsername=<smtp username>                      # Smtp username
+mail.smtpPassword=<smtp password>                      # Smtp password
+mail.smtpHost=<smtp host>                              # Smtp host
+mail.smtpPort=<smtp port>                              # Smtp port
 ```
 
 ## License

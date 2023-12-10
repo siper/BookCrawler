@@ -48,7 +48,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             id = BookId(work.id, At.PROVIDER_NAME),
                             title = work.title,
                             coverUrl = work.coverUrl,
-                            author = work.authorFIO,
+                            authors = listOfNotNull(work.authorFIO, work.coAuthorFIO),
                             series = getSeriesFromWork(work),
                             type = MessageType.NEW_BOOK_IN_LIBRARY,
                             availableActions = if (work.inLibraryState == LibraryState.Finished) {
@@ -78,7 +78,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             id = BookId(work.id, At.PROVIDER_NAME),
                             title = work.title,
                             coverUrl = work.coverUrl,
-                            author = work.authorFIO,
+                            authors = listOfNotNull(work.authorFIO, work.coAuthorFIO),
                             series = getSeriesFromWork(work),
                             type = MessageType.UPDATES_IN_READING_BOOK,
                             availableActions = if (work.inLibraryState == LibraryState.Finished) {
@@ -101,7 +101,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                             id = BookId(nextWork.id, At.PROVIDER_NAME),
                             title = nextWork.title,
                             coverUrl = nextWork.coverUrl,
-                            author = nextWork.authorFIO,
+                            authors = listOfNotNull(nextWork.authorFIO, nextWork.coAuthorFIO),
                             series = getSeriesFromWork(nextWork),
                             type = MessageType.NEW_BOOK_IN_SERIES,
                             availableActions = listOf(Action.ADD_TO_LIBRARY)

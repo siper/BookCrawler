@@ -28,8 +28,15 @@ class TelegramNotificationHandler(
             append("\n")
             append("*${notification.title}*")
             append("\n")
-            append("_${notification.author}_")
         }
+        message.append("_")
+        notification.authors.forEachIndexed { index, author ->
+            if (index > 0) {
+                message.append(", ")
+            }
+            message.append(author)
+        }
+        message.append("_")
         if (notification.series != null) {
             message.append("\n")
             message.append("__${notification.series.title} (${notification.series.order})__")

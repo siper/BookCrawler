@@ -7,6 +7,7 @@ import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookHandlerManager
 import ru.stersh.bookcrawler.core.toFb2
 import ru.stersh.bookcrawler.logger
+import ru.stersh.bookcrawler.module.at.normalizeBookName
 
 class DropboxBookHandler(
     private val token: String,
@@ -24,7 +25,7 @@ class DropboxBookHandler(
         val fb2Book = book.toFb2()
         val ins = fb2Book.byteInputStream()
 
-        val bookFilename = "${book.title}.fb2"
+        val bookFilename = "${normalizeBookName(book.title)}.fb2"
         val targetPath = if (folder == null) {
             bookFilename
         } else {

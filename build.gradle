@@ -42,6 +42,7 @@ dependencies {
     implementation("org.redundent:kotlin-xml-builder:1.9.1")
     implementation("com.dropbox.core:dropbox-core-sdk:5.4.5")
     implementation("javax.mail:mail:1.4.7")
+    implementation("ru.homyakin:iuliia-java:1.8")
 }
 
 kotlin {

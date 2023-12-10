@@ -6,6 +6,7 @@ import com.github.kotlintelegrambot.entities.TelegramFile
 import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookHandlerManager
 import ru.stersh.bookcrawler.core.toFb2
+import ru.stersh.bookcrawler.module.at.normalizeBookName
 
 class TelegramBookHandler(
     private val bot: Bot,
@@ -16,7 +17,7 @@ class TelegramBookHandler(
     override suspend fun onBookCreated(book: Book) {
         bot.sendDocument(
             chatId = ChatId.fromId(chatId),
-            document = TelegramFile.ByByteArray(book.toFb2().encodeToByteArray(), filename = "${book.title}.fb2")
+            document = TelegramFile.ByByteArray(book.toFb2().encodeToByteArray(), filename = "${normalizeBookName(book.title)}.fb2")
         )
     }
 }

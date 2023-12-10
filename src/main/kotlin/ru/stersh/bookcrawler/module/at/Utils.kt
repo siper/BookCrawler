@@ -1,5 +1,8 @@
 package ru.stersh.bookcrawler.module.at
 
+import ru.homyakin.iuliia.Schemas
+import ru.homyakin.iuliia.Translator
+
 fun getDecodedText(userId: String, key: String, text: String): String {
     val secret = key.reversed() + "@_@" + userId
     val stringBuilder = StringBuilder()
@@ -9,4 +12,9 @@ fun getDecodedText(userId: String, key: String, text: String): String {
         )
     }
     return stringBuilder.toString()
+}
+
+fun normalizeBookName(source: String): String {
+    val translator = Translator(Schemas.WIKIPEDIA)
+    return translator.translate(source)
 }

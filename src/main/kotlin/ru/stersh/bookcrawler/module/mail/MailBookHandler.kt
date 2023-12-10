@@ -4,6 +4,7 @@ import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookHandlerManager
 import ru.stersh.bookcrawler.core.toFb2
 import ru.stersh.bookcrawler.logger
+import ru.stersh.bookcrawler.module.at.normalizeBookName
 import java.util.*
 import javax.activation.DataHandler
 import javax.mail.*
@@ -55,7 +56,7 @@ class MailBookHandler(
 
             val multipart: Multipart = MimeMultipart()
 
-            val fileName = "${book.title}.fb2"
+            val fileName = "${normalizeBookName(book.title)}.fb2"
             val source = ByteArrayDataSource(bookBytes, "application/x-fictionbook")
             messageBodyPart.setDataHandler(DataHandler(source))
             messageBodyPart.fileName = fileName

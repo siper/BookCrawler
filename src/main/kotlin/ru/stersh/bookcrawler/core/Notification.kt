@@ -5,7 +5,7 @@ data class Notification(
     val type: MessageType,
     val title: String,
     val coverUrl: String,
-    val author: String,
+    val authors: List<String>,
     val series: Series?,
     val availableActions: List<Action>
 ) {

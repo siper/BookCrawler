@@ -94,7 +94,16 @@ class AtLibraryCheckTask : TaskManager.Task {
             }
             for (nextSeriesWorkId in newWorkInSeriesIds) {
                 if (localLibrary.none { it.id == nextSeriesWorkId } && remoteLibrary.none { it.id == nextSeriesWorkId }) {
-                    val nextWork = At.getWork(nextSeriesWorkId)
+                    val nextWork =
+                        runCatching {
+                            At.getWork(nextSeriesWorkId)
+                        }.onFailure {
+                            logger.warn("Filed to receive work info $nextSeriesWorkId")
+                        }.getOrNull()
+                    if (nextWork == null) {
+                        continue
+                    }
+
                     insertWorkIntoLibrary(nextWork, false)
                     NotificationManager.onNewNotification(
                         Notification(

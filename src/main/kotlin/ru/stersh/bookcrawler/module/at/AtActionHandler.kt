@@ -38,6 +38,7 @@ class AtActionHandler : ActionsManager.ActionHandler {
     private suspend fun addToLibrary(bookId: BookId) {
         runCatching {
             At.addToLibrary(bookId.id)
+            val book = At.getBook(bookId.id)
             transaction {
                 AtBookDb.update(
                     { AtBookDb.id eq bookId.id }
@@ -45,7 +46,6 @@ class AtActionHandler : ActionsManager.ActionHandler {
                     it[inLibrary] = true
                 }
             }
-            val book = At.getBook(bookId.id)
             BookHandlerManager.onBookCreated(book)
         }.onFailure {
             logger.warn("Filed to add book $bookId to library", it)

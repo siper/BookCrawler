@@ -1,4 +1,4 @@
-ARG VERSION=17
+ARG VERSION=18
 
 FROM openjdk:${VERSION}-jdk as BUILD
 

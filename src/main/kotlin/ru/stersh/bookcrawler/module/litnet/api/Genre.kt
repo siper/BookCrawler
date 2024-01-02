@@ -1,0 +1,15 @@
+package ru.stersh.bookcrawler.module.litnet.api
+
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Genre(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("rating_place")
+    val ratingPlace: Int
+)

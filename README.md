@@ -4,7 +4,7 @@
 
 ## Overview
 
-Bookcrawler - selfhosted tool for monitoring your library on book publishing platforms (like author.today), and deliver updates with Dropbox, telegram and etc.
+Bookcrawler - selfhosted tool for monitoring your library on book publishing platforms (like author.today and litnet.com), and deliver updates with Dropbox, telegram and etc.
 
 ## Usage
 
@@ -12,13 +12,13 @@ Serve it with Docker:
 
 ```Docker
 docker run -d \
---name=bookcrawler \
--e PUID=1000 \
--e PGID=1000 \
--e TZ=Etc/UTC \
--v /path/to/data:/config \
---restart unless-stopped \
-stersh/bookcrawler-dev:latest
+  --name=bookcrawler \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Etc/UTC \
+  -v /path/to/data:/config \
+  --restart unless-stopped \
+  stersh/bookcrawler-dev:latest
 ```
 
 Or use docker compose:
@@ -46,6 +46,9 @@ logging.app=INFO                                       # app log level, may be: 
 logging.db=true                                        # log database transactions (default: false)
 at.accessToken=<author.today token here>               # author.today access token
 at.libraryCheckPeriod=10                               # library check interval in minutes (default: 10)
+litnet.username=<litnet.com username>                  # litnet.com username (email or phone)
+litnet.password=<litnet.com username>                  # litnet.com password
+litnet.token=<litnet.com access token>                 # your can set username and password, or token manually
 telegram.botToken=<your telegram token here>           # telegram bot token (use Bot Father to receive it)
 telegram.chatId=<telegram chatId>                      # telegram chat id (use chat id bot to receive it)
 telegram.uploadBookUpdates=true                        # send book updates to telegram bot (default: false)

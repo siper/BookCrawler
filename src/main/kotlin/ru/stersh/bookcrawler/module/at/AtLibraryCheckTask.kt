@@ -38,27 +38,25 @@ class AtLibraryCheckTask : TaskManager.Task {
 
             for (work in remoteLibrary) {
                 val localBook = localLibrary.firstOrNull { it.id == work.id }
-                if (localBook == null) {
-                    val inLibrary =
-                        work.inLibraryState != LibraryState.None && work.inLibraryState != LibraryState.Disliked
-                    insertWorkIntoLibrary(work, inLibrary)
 
-                    NotificationManager.onNewNotification(
-                        Notification(
-                            id = BookId(work.id, At.PROVIDER_NAME),
-                            title = work.title,
-                            coverUrl = work.coverUrl,
-                            authors = listOfNotNull(work.authorFIO, work.coAuthorFIO),
-                            series = getSeriesFromWork(work),
-                            type = MessageType.NEW_BOOK_IN_LIBRARY,
-                            availableActions = if (work.inLibraryState == LibraryState.Finished) {
-                                emptyList()
-                            } else {
-                                listOf(Action.MARK_READ)
-                            }
-                        )
-                    )
-                    handleBook(work.id)
+                val inLibrary = work.inLibraryState != LibraryState.None
+                        && work.inLibraryState != LibraryState.Disliked
+
+                if (localBook == null) {
+                    insertWorkIntoLibrary(work, inLibrary)
+                    onNewWorkInLibrary(work)
+                    continue
+                }
+                if (!localBook.inLibrary && inLibrary) {
+                    transaction {
+                        AtBookDb.update(
+                            { AtBookDb.id eq work.id }
+                        ) {
+                            it[AtBookDb.inLibrary] = true
+                            it[updatedAt] = DateTimeFormatter.ISO_ZONED_DATE_TIME.format(ZonedDateTime.now())
+                        }
+                    }
+                    onNewWorkInLibrary(work)
                     continue
                 }
                 if (localBook.lastModificationTime != work.lastModificationTime) {
@@ -120,6 +118,25 @@ class AtLibraryCheckTask : TaskManager.Task {
             }
             delay(libraryCheckDelay.minutes)
         }
+    }
+
+    private suspend fun onNewWorkInLibrary(work: Work) {
+        NotificationManager.onNewNotification(
+            Notification(
+                id = BookId(work.id, At.PROVIDER_NAME),
+                title = work.title,
+                coverUrl = work.coverUrl,
+                authors = listOfNotNull(work.authorFIO, work.coAuthorFIO),
+                series = getSeriesFromWork(work),
+                type = MessageType.NEW_BOOK_IN_LIBRARY,
+                availableActions = if (work.inLibraryState == LibraryState.Finished) {
+                    emptyList()
+                } else {
+                    listOf(Action.MARK_READ)
+                }
+            )
+        )
+        handleBook(work.id)
     }
 
     private fun getSeriesFromWork(work: Work): Notification.Series? {

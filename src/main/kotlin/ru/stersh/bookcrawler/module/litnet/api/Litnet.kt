@@ -9,6 +9,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import ru.stersh.bookcrawler.NETWORK_LOG_LEVEL
 import ru.stersh.bookcrawler.Properties
 import ru.stersh.bookcrawler.core.Book
 import ru.stersh.bookcrawler.core.BookId
@@ -34,7 +35,7 @@ object Litnet {
         }
         install(HttpSend)
         install(Logging) {
-            level = LogLevel.ALL
+            level = NETWORK_LOG_LEVEL
         }
         defaultRequest {
             url("https://api.litnet.com/v1/")

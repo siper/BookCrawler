@@ -59,6 +59,33 @@ class AtLibraryCheckTask : TaskManager.Task {
                     onNewWorkInLibrary(work)
                     continue
                 }
+                if (!localBook.purchased && work.isPurchased) {
+                    transaction {
+                        AtBookDb.update(
+                            { AtBookDb.id eq work.id }
+                        ) {
+                            it[purchased] = true
+                            it[updatedAt] = DateTimeFormatter.ISO_ZONED_DATE_TIME.format(ZonedDateTime.now())
+                        }
+                    }
+                    NotificationManager.onNewNotification(
+                        Notification(
+                            id = BookId(work.id, At.PROVIDER_NAME),
+                            title = work.title,
+                            coverUrl = work.coverUrl,
+                            authors = listOfNotNull(work.authorFIO, work.coAuthorFIO),
+                            series = getSeriesFromWork(work),
+                            type = MessageType.BOOK_PURCHASED,
+                            availableActions = if (work.inLibraryState == LibraryState.Finished) {
+                                emptyList()
+                            } else {
+                                listOf(Action.MARK_READ)
+                            }
+                        )
+                    )
+                    handleBook(work.id)
+                    continue
+                }
                 if (localBook.lastModificationTime != work.lastModificationTime) {
                     transaction {
                         AtBookDb.update(
@@ -171,6 +198,7 @@ class AtLibraryCheckTask : TaskManager.Task {
             it[AtBookDb.inLibrary] = inLibrary
             it[read] = work.inLibraryState == LibraryState.Finished
             it[id] = work.id
+            it[purchased] = work.isPurchased
             it[updatedAt] = DateTimeFormatter.ISO_ZONED_DATE_TIME.format(ZonedDateTime.now())
             it[lastModificationTime] = work.lastModificationTime
         }

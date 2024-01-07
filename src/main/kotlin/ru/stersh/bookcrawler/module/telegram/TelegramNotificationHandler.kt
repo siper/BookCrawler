@@ -17,6 +17,7 @@ class TelegramNotificationHandler(
             MessageType.NEW_BOOK_IN_LIBRARY -> "Новая книга в библиотеке"
             MessageType.UPDATES_IN_READING_BOOK -> "Обновление книги"
             MessageType.NEW_BOOK_IN_SERIES -> "Новая книга в серии"
+            MessageType.BOOK_PURCHASED -> "Книга куплена"
         }
         sendUpdates(title, notification)
     }

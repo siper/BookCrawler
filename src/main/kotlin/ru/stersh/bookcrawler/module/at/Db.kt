@@ -16,6 +16,7 @@ object AtBookDb : Table() {
     val completed = bool("completed").default(true)
     val read = bool("read").default(false)
     val inLibrary = bool("inLibrary").default(false)
+    val purchased = bool("purchased").default(false)
     val coverUrl = varchar("coverPath", 1024).nullable()
     val updatedAt = varchar("updatedAt", 1024)
     val lastModificationTime = varchar("lastModificationTime", 1024)
@@ -33,6 +34,7 @@ data class AtBook(
     val completed: Boolean,
     val inLibrary: Boolean,
     val read: Boolean,
+    val purchased: Boolean,
     val updatedAt: ZonedDateTime,
     val lastModificationTime: String,
 ) {
@@ -48,6 +50,7 @@ data class AtBook(
                 completed = row[AtBookDb.completed],
                 inLibrary = row[AtBookDb.inLibrary],
                 read = row[AtBookDb.read],
+                purchased = row[AtBookDb.purchased],
                 coverUrl = row[AtBookDb.coverUrl],
                 updatedAt = ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse(row[AtBookDb.updatedAt])),
                 lastModificationTime = row[AtBookDb.lastModificationTime]

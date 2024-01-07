@@ -74,6 +74,34 @@ class LitnetLibraryCheckTask : TaskManager.Task {
                 continue
             }
 
+            if (!localBook.purchased && libraryItem.book.isPurchased) {
+                transaction {
+                    LitnetBookDb.update(
+                        { LitnetBookDb.id eq libraryItem.book.id }
+                    ) {
+                        it[purchased] = true
+                        it[lastModificationTime] = libraryItem.book.lastUpdate
+                    }
+                }
+                NotificationManager.onNewNotification(
+                    Notification(
+                        id = BookId(libraryItem.book.id, LITNET_PROVIDER_NAME),
+                        title = libraryItem.book.title,
+                        coverUrl = libraryItem.book.cover,
+                        authors = listOfNotNull(libraryItem.book.authorName, libraryItem.book.coAuthorName),
+                        series = null,
+                        type = MessageType.BOOK_PURCHASED,
+                        availableActions = if (libraryItem.libInfo.type == LibInfo.TYPE_ARCHIVE) {
+                            emptyList()
+                        } else {
+                            listOf(Action.MARK_READ)
+                        }
+                    )
+                )
+                handleBook(libraryItem.book.id)
+                continue
+            }
+
             if (localBook.lastModificationTime != libraryItem.book.lastUpdate) {
                 transaction {
                     LitnetBookDb.update(

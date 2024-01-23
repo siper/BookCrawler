@@ -123,7 +123,7 @@ class AtLibraryCheckTask : TaskManager.Task {
                         runCatching {
                             At.getWork(nextSeriesWorkId)
                         }.onFailure {
-                            logger.warn("Filed to receive work info $nextSeriesWorkId")
+                            logger.warn("Filed to receive work info $nextSeriesWorkId", it)
                         }.getOrNull()
                     if (nextWork == null) {
                         continue
@@ -182,7 +182,7 @@ class AtLibraryCheckTask : TaskManager.Task {
             val book = At.getBook(workId)
             BookHandlerManager.onBookCreated(book)
         }.onFailure {
-            logger.warn("Filed to download work $workId")
+            logger.warn("Filed to download work $workId", it)
         }
     }
 

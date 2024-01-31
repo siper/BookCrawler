@@ -81,7 +81,7 @@ data class Work(
     @SerialName("secondSubGenreId")
     val secondSubGenreId: Long?,
     @SerialName("seriesId")
-    val seriesId: Long,
+    val seriesId: Long?,
     @SerialName("seriesNextWorkId")
     val seriesNextWorkId: Long?,
     @SerialName("seriesOrder")

@@ -14,7 +14,13 @@ fun getDecodedText(userId: String, key: String, text: String): String {
     return stringBuilder.toString()
 }
 
+private val StopChars = listOf('?', '!', '/', '\\','*', ':', '<', '>', '"', '|', '+')
+
 fun normalizeBookName(source: String): String {
     val translator = Translator(Schemas.WIKIPEDIA)
-    return translator.translate(source)
+    var newName = translator.translate(source)
+    for (char in StopChars) {
+        newName = newName.replace(char.toString(), "")
+    }
+    return newName
 }

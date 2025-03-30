@@ -43,13 +43,22 @@ class TelegramNotificationHandler(
             message.append("__${notification.series.title} (${notification.series.order})__")
         }
 
-        bot.sendPhoto(
-            chatId = ChatId.fromId(chatId),
-            photo = TelegramFile.ByUrl(notification.coverUrl),
-            caption = message.toString(),
-            parseMode = ParseMode.MARKDOWN,
-            replyMarkup = createReplyMarkup(notification.id, notification.availableActions)
-        )
+        if (notification.coverUrl != null) {
+            bot.sendPhoto(
+                chatId = ChatId.fromId(chatId),
+                photo = TelegramFile.ByUrl(notification.coverUrl),
+                caption = message.toString(),
+                parseMode = ParseMode.MARKDOWN,
+                replyMarkup = createReplyMarkup(notification.id, notification.availableActions)
+            )
+        } else {
+            bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                text = message.toString(),
+                parseMode = ParseMode.MARKDOWN,
+                replyMarkup = createReplyMarkup(notification.id, notification.availableActions)
+            )
+        }
     }
 
     private fun createReplyMarkup(bookId: BookId, actions: List<Action>): ReplyMarkup? {

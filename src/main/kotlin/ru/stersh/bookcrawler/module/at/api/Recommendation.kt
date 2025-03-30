@@ -21,11 +21,11 @@ data class Recommendation(
     @SerialName("coAuthorUserName")
     val coAuthorUserName: String?,
     @SerialName("coverUrl")
-    val coverUrl: String,
+    val coverUrl: String?,
     @SerialName("discount")
     val discount: Float?,
     @SerialName("finishTime")
-    val finishTime: String,
+    val finishTime: String?,
     @SerialName("finished")
     val finished: Boolean,
     @SerialName("format")

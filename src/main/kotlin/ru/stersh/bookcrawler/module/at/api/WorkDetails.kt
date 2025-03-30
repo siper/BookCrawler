@@ -43,7 +43,7 @@ data class WorkDetails(
     @SerialName("commentCount")
     val commentCount: Int,
     @SerialName("coverUrl")
-    val coverUrl: String,
+    val coverUrl: String?,
     @SerialName("discount")
     val discount: Float?,
     @SerialName("downloadErrorCode")
@@ -57,7 +57,7 @@ data class WorkDetails(
     @SerialName("finishTime")
     val finishTime: String?,
     @SerialName("firstSubGenreId")
-    val firstSubGenreId: Long,
+    val firstSubGenreId: Long?,
     @SerialName("format")
     val format: String,
     @SerialName("freeChapterCount")

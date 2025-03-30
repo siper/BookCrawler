@@ -148,7 +148,7 @@ class LitnetLibraryCheckTask : TaskManager.Task {
         for (localId in localLibraryIds) {
             val allSeriesBookResult = runCatching { Litnet.getAllSeriesBooks(localId) }
                 .onFailure {
-                    logger.warn("[Litnet] Filed to get all series books for $localId")
+                    logger.warn("[Litnet] Filed to get all series books for $localId", it)
                 }
 
             val allSeriesBookIds = allSeriesBookResult
@@ -189,7 +189,7 @@ class LitnetLibraryCheckTask : TaskManager.Task {
             val book = Litnet.getBook(bookId)
             BookHandlerManager.onBookCreated(book)
         }.onFailure {
-            logger.warn("[Litnet] Filed to download book $bookId")
+            logger.warn("[Litnet] Filed to download book $bookId", it)
         }
     }
 

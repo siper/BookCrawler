@@ -4,7 +4,7 @@ data class Notification(
     val id: BookId,
     val type: MessageType,
     val title: String,
-    val coverUrl: String,
+    val coverUrl: String?,
     val authors: List<String>,
     val series: Series?,
     val availableActions: List<Action>

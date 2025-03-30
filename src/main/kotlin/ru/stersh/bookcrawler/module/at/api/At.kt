@@ -171,16 +171,20 @@ object At {
             null
         }
 
-        val coverResponse = client.get(workDetails.coverUrl)
+        val cover = if (workDetails.coverUrl != null) {
+            val coverResponse = client.get(workDetails.coverUrl)
 
-        val coverType = Book.Image.Type.fromContentType(coverResponse.headers["Content-Type"])
-        val coverBytes = coverResponse.readBytes()
+            val coverType = Book.Image.Type.fromContentType(coverResponse.headers["Content-Type"])
+            val coverBytes = coverResponse.readBytes()
 
-        val cover = Book.Image.Raw(
-            bytes = coverBytes,
-            type = coverType,
-            name = "cover"
-        )
+            Book.Image.Raw(
+                bytes = coverBytes,
+                type = coverType,
+                name = "cover"
+            )
+        } else {
+            null
+        }
 
         return Book(
             id = BookId(workId, PROVIDER_NAME),

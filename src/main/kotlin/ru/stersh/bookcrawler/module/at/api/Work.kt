@@ -29,7 +29,7 @@ data class Work(
     @SerialName("commentCount")
     val commentCount: Long,
     @SerialName("coverUrl")
-    val coverUrl: String,
+    val coverUrl: String?,
     @SerialName("enableRedLine")
     val enableRedLine: Boolean,
     @SerialName("enableTTS")

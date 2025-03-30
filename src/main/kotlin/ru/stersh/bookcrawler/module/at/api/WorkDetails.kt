@@ -139,7 +139,7 @@ data class WorkDetails(
     @SerialName("seriesTitle")
     val seriesTitle: String?,
     @SerialName("seriesWorkIds")
-    val seriesWorkIds: List<Int>,
+    val seriesWorkIds: List<Int>?,
     @SerialName("seriesWorkNumber")
     val seriesWorkNumber: Int,
     @SerialName("state")

@@ -80,7 +80,7 @@ object Litnet {
                 addDefaultParams()
                 parameter("bookId", bookId)
             }
-            .body<ArrayList<Chapter>>()
+            .body<List<Chapter>>()
     }
 
     suspend fun getChapterTexts(chapterIds: List<Long>): List<ChapterText> {
@@ -91,7 +91,7 @@ object Litnet {
                     parameter("chapter_ids[]", it)
                 }
             }
-            .body<ArrayList<ChapterText>>()
+            .body<List<ChapterText>>()
             .map {
                 it.copy(text = decrypt(it.text))
             }
@@ -106,6 +106,7 @@ object Litnet {
             }
             .body<BookDetailsResponse>()
             .series
+            .orEmpty()
     }
 
     suspend fun getBook(bookId: Long): Book {
